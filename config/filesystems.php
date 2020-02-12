@@ -64,6 +64,11 @@ return [
             'url' => env('AWS_URL'),
         ],
 
+        'exports' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/poc'),
+        ]
+
     ],
 
 ];

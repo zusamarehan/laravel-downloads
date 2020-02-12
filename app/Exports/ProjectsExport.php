@@ -10,6 +10,10 @@ use Maatwebsite\Excel\Concerns\WithTitle;
 
 class ProjectsExport implements FromCollection, WithHeadings, ShouldAutoSize, WithTitle
 {
+
+    /**
+     * @var Collection
+     */
     public $project;
 
     public function __construct(Collection $projects)

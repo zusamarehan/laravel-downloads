@@ -33,11 +33,15 @@ class ProjectController extends Controller
     }
 
     /**
-     * @return BinaryFileResponse
+     * @return void
      */
     public function export()
     {
+        $allPOC = Projects::with(['cases', 'notes', 'tasks'])->get();
 
-        return Excel::download(new DownloadPOC(Projects::with(['cases', 'notes', 'tasks'])->get()), 'POC Data.xlsx');
+        foreach ($allPOC as $poc){
+            Excel::store(new DownloadPOC($allPOC, $poc->id), $poc->title.' POC Data.xlsx', 'exports');
+        }
+
     }
 }
