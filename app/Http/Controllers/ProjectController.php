@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\DownloadPOC;
 use App\Http\Resources\ProjectResource;
 use App\Projects;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Maatwebsite\Excel\Facades\Excel;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class ProjectController extends Controller
 {
@@ -27,5 +30,14 @@ class ProjectController extends Controller
 
         return new ProjectResource($project->load(['cases', 'notes', 'tasks']));
 
+    }
+
+    /**
+     * @return BinaryFileResponse
+     */
+    public function export()
+    {
+
+        return Excel::download(new DownloadPOC(Projects::with(['cases', 'notes', 'tasks'])->get()), 'POC Data.xlsx');
     }
 }
