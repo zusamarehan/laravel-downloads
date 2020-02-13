@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\DB;
 class DatabaseSeeder extends Seeder
 {
 
-    public $tables = ['users', 'projects', 'cases', 'notes', 'tasks'];
+    public $tables = ['users', 'organizations' ,'projects', 'cases', 'notes', 'tasks'];
     /**
      * Seed the application's database.
      *
@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
         }
 
          $this->call(UsersTableSeeder::class);
+         $this->call(OrganizationsTableSeeder::class);
          $this->call(ProjectsTableSeeder::class);
          $this->call(CasesTableSeeder::class);
          $this->call(TasksTableSeeder::class);

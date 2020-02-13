@@ -2,11 +2,9 @@
 
 /** @var Factory $factory */
 
-use App\Projects;
 use App\Organizations;
 use Faker\Generator as Faker;
 use Illuminate\Database\Eloquent\Factory;
-use Illuminate\Support\Str;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,12 +17,8 @@ use Illuminate\Support\Str;
 |
 */
 
-$factory->define(Projects::class, function (Faker $faker) {
+$factory->define(Organizations::class, function (Faker $faker) {
     return [
-        'organizations_id' => rand(1, Organizations::count()),
-        'title' => $faker->name,
-        'desc' => $faker->sentence,
-        'start_date' => $faker->date(),
-        'end_date' => $faker->date(),
+        'name' => $faker->name,
     ];
 });

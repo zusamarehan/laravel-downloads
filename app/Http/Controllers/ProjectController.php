@@ -2,12 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Exports\DownloadPOC;
 use App\Http\Resources\ProjectResource;
+use App\Jobs\DownloadPOCData;
 use App\Projects;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
-use Maatwebsite\Excel\Facades\Excel;
-use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class ProjectController extends Controller
 {
@@ -33,15 +31,28 @@ class ProjectController extends Controller
     }
 
     /**
-     * @return void
+     * @return string
      */
     public function export()
     {
-        $allPOC = Projects::with(['cases', 'notes', 'tasks'])->get();
+        // usually we get this from auth()
+        $organizationID = 10;
 
-        foreach ($allPOC as $poc){
-            Excel::store(new DownloadPOC($allPOC, $poc->id), $poc->title.' POC Data.xlsx', 'exports');
-        }
+        // Get all the projects for the Specified Project ID
+        $allPOC = Projects::with(['organization', 'cases', 'notes', 'tasks'])
+                            ->where('organizations_id', $organizationID)
+                            ->get();
+
+        DownloadPOCData::dispatch($allPOC);
+
+        return 'Your request is in progress. You can visit the link to check the progress!';
+
+    }
+
+
+    public function exportProgress($id) {
+
+
 
     }
 }
