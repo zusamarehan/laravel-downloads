@@ -18,3 +18,4 @@ Route::get('/', function () {
 Route::get('/projects/export', 'ProjectController@export');
 Route::get('/projects', 'ProjectController@index');
 Route::get('/projects/{project}', 'ProjectController@show');
+Route::get('/export/status/{id}', 'ProjectController@show');

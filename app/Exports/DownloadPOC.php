@@ -2,7 +2,8 @@
 
 namespace App\Exports;
 
-use Illuminate\Database\Eloquent\Collection;
+use App\Projects;
+use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\WithMultipleSheets;
 
 class DownloadPOC implements WithMultipleSheets
@@ -15,8 +16,8 @@ class DownloadPOC implements WithMultipleSheets
 
     /**
      * DownloadPOC constructor.
-     * @param $projects
-     * @param $projectID
+     * @param Collection $projects
+     * @param int $projectID
      */
     public function __construct(Collection $projects, int $projectID)
     {

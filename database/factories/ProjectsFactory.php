@@ -21,7 +21,6 @@ use Illuminate\Support\Str;
 
 $factory->define(Projects::class, function (Faker $faker) {
     return [
-        'organizations_id' => rand(1, Organizations::count()),
         'title' => $faker->name,
         'desc' => $faker->sentence,
         'start_date' => $faker->date(),

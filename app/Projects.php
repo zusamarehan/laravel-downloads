@@ -10,15 +10,6 @@ class Projects extends Model
 {
 
     /**
-     *
-     */
-    public function organization() {
-
-        return $this->belongsTo('App\Organizations', 'organizations_id', 'id');
-
-    }
-
-    /**
      * @return HasMany
      */
     public function cases() {

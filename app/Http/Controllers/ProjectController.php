@@ -2,10 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\DownloadRequests;
 use App\Http\Resources\ProjectResource;
+use App\Jobs\CreateExcel;
 use App\Jobs\DownloadPOCData;
+use App\Jobs\ZipExcels;
+use App\JobWatchers;
 use App\Projects;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Support\Facades\Storage;
 
 class ProjectController extends Controller
 {
@@ -35,24 +40,24 @@ class ProjectController extends Controller
      */
     public function export()
     {
-        // usually we get this from auth()
-        $organizationID = 10;
 
-        // Get all the projects for the Specified Project ID
-        $allPOC = Projects::with(['organization', 'cases', 'notes', 'tasks'])
-                            ->where('organizations_id', $organizationID)
-                            ->get();
+        $downloadRequest = DownloadRequests::create();
 
-        DownloadPOCData::dispatch($allPOC);
+        $jobListing = [];
+
+        $allPOC = Projects::with(['cases', 'notes', 'tasks'])->get();
+
+        // Creating New Job per Project and then pushing it to Job List Array
+        foreach ($allPOC as $poc){
+            array_push($jobListing, new CreateExcel($allPOC, $poc->id, $downloadRequest));
+        }
+        // Create New Job for Zipping Files and push to Job List Array
+        array_push($jobListing, new ZipExcels($downloadRequest));
+        // Dispatch All Jobs
+        DownloadPOCData::withChain($jobListing)->dispatch();
 
         return 'Your request is in progress. You can visit the link to check the progress!';
 
     }
 
-
-    public function exportProgress($id) {
-
-
-
-    }
 }
