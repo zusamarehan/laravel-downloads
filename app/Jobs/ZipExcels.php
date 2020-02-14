@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\DownloadRequests;
+use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -48,7 +49,6 @@ class ZipExcels implements ShouldQueue
         $projectExcels = Storage::disk('exports')->files($this->downloadRequests->id);
 
         foreach ($projectExcels as $projectExcel){
-            dump($projectExcels);
             // Adding file: second parameter is what will the path inside of the archive
             // So it will create another folder called "storage/" inside ZIP, and put the file there.
             $zip->addFile(storage_path('app/public/poc/').$projectExcel, $projectExcel);
@@ -56,5 +56,12 @@ class ZipExcels implements ShouldQueue
         }
 
         $zip->close();
+
+        DownloadRequests::find($this->downloadRequests->id)
+                         ->update([
+                             'percentage'   => 100,
+                             'end_time'     => Carbon::now(),
+                             'download_url' => '/exports/'.$this->downloadRequests->id
+                         ]);
     }
 }

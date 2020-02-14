@@ -15,7 +15,11 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/projects/export', 'ProjectController@export');
+
 Route::get('/projects', 'ProjectController@index');
 Route::get('/projects/{project}', 'ProjectController@show');
-Route::get('/export/status/{id}', 'ProjectController@show');
+
+Route::get('/export', 'ExportController@export');
+Route::get('/export/status/{downloadRequests}', 'ExportController@status')->name('exportStatus');
+Route::get('/export/status/percentage/{downloadRequests}', 'ExportController@percentage')->name('exportStatus');
+Route::get('/export/download/{downloadRequests}', 'ExportController@download');

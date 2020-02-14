@@ -5,6 +5,7 @@ namespace App\Jobs;
 use App\DownloadRequests;
 use App\Exports\DownloadPOC;
 use App\Projects;
+use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -55,5 +56,11 @@ class CreateExcel implements ShouldQueue
     {
         //
         Excel::store(new DownloadPOC($this->projects, $this->projectID), $this->downloadRequests->id.'/'.$this->projectID.'.xlsx', 'exports');
+
+        DownloadRequests::find($this->downloadRequests->id)
+            ->update([
+                'percentage'   => ($this->projectID/count($this->projects)) * 100,
+            ]);
+
     }
 }
