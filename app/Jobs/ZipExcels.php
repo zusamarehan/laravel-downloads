@@ -57,11 +57,5 @@ class ZipExcels implements ShouldQueue
 
         $zip->close();
 
-        DownloadRequests::find($this->downloadRequests->id)
-                         ->update([
-                             'percentage'   => 100,
-                             'end_time'     => Carbon::now(),
-                             'download_url' => '/exports/'.$this->downloadRequests->id
-                         ]);
     }
 }
